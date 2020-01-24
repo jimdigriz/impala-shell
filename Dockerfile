@@ -24,10 +24,17 @@ RUN wget --content-disposition \
 
 RUN cd apache-impala-3.3.0 \
 	&& export IMPALA_HOME=$(pwd) \
+	&& sed -ie '/buildall/ s/^/#/' bin/bootstrap_build.sh \
 	&& ./bin/bootstrap_build.sh \
-	&& apt-get clean \
+	&& sed -ie '/buildall/ s/^#//' bin/bootstrap_build.sh \
+
+RUN apt-get clean \
 	&& find /var/lib/apt/lists -type f -delete
+
+RUN cd apache-impala-3.3.0 \
+	&& export IMPALA_HOME=$(pwd) \
+	&& ./buildall.sh -noclean -notests -skiptests
 
 COPY init /init
 
-ENTRYPOINT ["init"]
+ENTRYPOINT ["/init"]
