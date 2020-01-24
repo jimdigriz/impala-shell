@@ -17,7 +17,7 @@ Now checkout a copy of the project with:
 
     docker build -t impala-shell .
 
-This will take at *least* 30 minutes.
+This will take at *least* 30 minutes and will download a *lot* of content from the Internet.
 
 # Usage
 
