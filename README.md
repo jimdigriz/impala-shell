@@ -51,7 +51,7 @@ The wrapper script `impala-shell` does the following:
 
  * always adds `-k` to your parameters list so you do not need to
  * when running non-interactively (ie. in a script) then it always adds the parameters `--quiet --print_header -B`
-     * `docker exec -it impala-shell impala-shell ...` with the added `-it` makes the command interactive
+     * `docker exec -it impala-shell ...` with the added `-it` makes the command interactive
 
 If you wanted to run `impala-shell.sh` without the wrapper, you will want to adjust your incantation to resemble:
 
