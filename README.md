@@ -12,7 +12,7 @@ Now checkout a copy of the project with:
 
 # Build
 
-    docker build -t impala-shell -f .
+    docker build -t impala-shell .
 
 # Usage
 
