@@ -7,6 +7,7 @@ You will need:
  * [Docker](https://docs.docker.com/install/) (sorry!)
  * Impala authentication handled by Kerberos
      * credentials for yourself to log in
+ * about 20GiB of disk space
 
 Now checkout a copy of the project with:
 
@@ -15,6 +16,8 @@ Now checkout a copy of the project with:
 # Build
 
     docker build -t impala-shell .
+
+This will take at *least* 30 minutes.
 
 # Usage
 
