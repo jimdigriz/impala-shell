@@ -1,5 +1,15 @@
 This project builds a Docker container from which you can use [`impala-shell.sh`](https://impala.apache.org/docs/build/html/topics/impala_impala_shell.html).
 
+# Preflight
+
+You will need:
+
+  * [Docker](https://docs.docker.com/install/) (sorry!)
+
+Now checkout a copy of the project with:
+
+    git clone https://gitlab.com/jimdigriz/impala-shell.git
+
 # Build
 
     docker build -t impala-shell -f .
