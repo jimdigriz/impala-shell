@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+
+. bin/impala-config.sh
+unset LD_LIBRARY_PATH
+
+exec /bin/bash
