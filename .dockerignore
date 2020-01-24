@@ -1,2 +1,5 @@
 **/.*
-!init
+
+!impala-shell
+!krb5.conf
+!profile.sh

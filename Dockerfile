@@ -35,6 +35,9 @@ RUN cd apache-impala-3.3.0 \
 	&& export IMPALA_HOME=$(pwd) \
 	&& ./buildall.sh -noclean -notests -skiptests
 
-COPY init /init
+COPY profile.sh /etc/profile.d/impala-shell.sh
+COPY impala-shell /usr/local/bin/impala-shell
 
-ENTRYPOINT ["/init"]
+COPY krb5.conf /etc/krb5.conf
+
+CMD ["/bin/bash", "-l"]
