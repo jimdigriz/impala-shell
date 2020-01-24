@@ -56,3 +56,5 @@ The wrapper script `impala-shell` does the following:
 If you wanted to run `impala-shell.sh` without the wrapper, you will want to adjust your incantation to resemble:
 
     docker exec impala-shell /bin/bash -lc 'impala-shell.sh -i impala.example.com -k --print_header -B -q "SELECT * FROM db.table WHERE YEAR = 2020 AND MONTH = 1 AND DAY = 24 LIMIT 1"'
+
+The use of `bash -l` picks up `/etc/profile.d/impala-shell` so everything can work.
