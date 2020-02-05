@@ -7,6 +7,7 @@ You will need:
  * [Docker](https://docs.docker.com/install/) (sorry!)
  * Impala authentication handled by Kerberos
      * credentials for yourself to log in
+ * about 20GiB of RAM to compile everything needed to get `impala-shell.sh`
  * about 20GiB of disk space
 
 Now checkout a copy of the project with:
