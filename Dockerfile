@@ -1,6 +1,6 @@
 FROM ubuntu:bionic
 
-SHELL ["/bin/sh", "-x", "-c"]
+SHELL ["/usr/bin/nice", "-n", "19", "/usr/bin/ionice", "-c", "3", "/bin/sh", "-x", "-c"]
 
 # clean later
 RUN export DEBIAN_FRONTEND=noninteractive \
