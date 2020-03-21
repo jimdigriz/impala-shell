@@ -8,7 +8,7 @@ You will need:
  * Impala authentication handled by Kerberos
      * credentials for yourself to log in
  * about 20GiB of RAM to compile everything needed to get `impala-shell.sh`
- * about 20GiB of disk space
+ * about 30GiB of disk space (in your Docker mount point)
 
 Now checkout a copy of the project with:
 
