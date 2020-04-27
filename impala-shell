@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eux
+set -eu
 
 [ -t 0 ] || HEADLESS='--quiet --print_header -B --disable_live_progress'
 
