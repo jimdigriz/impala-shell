@@ -24,7 +24,7 @@ Before using the REPL, you will need to authenticate to Kerberos from your own w
 
 Now use the REPL instead via:
 
-    docker run -it --rm --env KRB5CCNAME=DIR:/tmp/krb5cc -v $(pwd)/.krb5cc:/tmp/krb5cc jimdigriz/impala-shell
+    docker run -it --rm --env KRB5CCNAME=DIR:/tmp/krb5cc -v $(pwd)/.krb5cc:/tmp/krb5cc:ro jimdigriz/impala-shell
 
 # Build
 
