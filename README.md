@@ -2,11 +2,7 @@ This project builds a Docker container from which you can use [`impala-shell`](h
 
 # Preflight
 
-You will need:
-
- * [Docker](https://docs.docker.com/install/) (sorry!)
- * Impala authentication handled by Kerberos
-     * credentials for yourself to log in
+You will need to have installed [Docker](https://docs.docker.com/install/).
 
 # Usage
 
@@ -32,11 +28,7 @@ Now use the REPL instead via:
 
 # Build
 
-You will need:
-
- * about 15GiB of disk space (in your Docker mount point)
-
-Checkout a copy of the project with:
+Make sure you have above 15GiB of disk space free avaliable to Docker (`df -h /var/lib/docker`) and then checkout a copy of the project with:
 
     git clone https://gitlab.com/jimdigriz/impala-shell.git
     cd impala-shell
