@@ -1,4 +1,4 @@
-This project builds a Docker container from which you can use [`impala-shell.sh`](https://impala.apache.org/docs/build/html/topics/impala_impala_shell.html).
+This project builds a Docker container from which you can use [`impala-shell`](https://impala.apache.org/docs/build/html/topics/impala_impala_shell.html).
 
 # Preflight
 
