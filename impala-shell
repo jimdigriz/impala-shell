@@ -1,7 +1,7 @@
 #!/bin/sh
 
-set -eu
+set -eux
 
-[ -t 0 ] || HEADLESS='--quiet --print_header -B'
+[ -t 0 ] || HEADLESS='--quiet --print_header -B --disable_live_progress'
 
-exec /opt/apache/impala/impala-shell ${HEADLESS:+$HEADLESS }"$@"
+exec /opt/apache/impala/impala-shell ${HEADLESS:+$HEADLESS }${KRB5CCNAME:+-k }"$@"

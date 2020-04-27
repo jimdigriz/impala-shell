@@ -12,27 +12,23 @@ You will need:
 
 Start running the built container image with:
 
-    docker run -it --rm --name jimdigriz/impala-shell
+    docker run -it --rm jimdigriz/impala-shell
 
-Now we authenticate ourselves to Kerberos from inside the container by running:
+This will drop you straight into a CLI [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) similar to `{sqlite3,mysql,psql}`.
 
-    kinit bob@EXAMPLE.COM
+If you want to use this from a script, you may find the following form useful to run queries directly:
 
-**N.B.** if this does not work, you can try `env KRB5_TRACE=/dev/stdout kinit ...`
+    docker run --rm impala-shell -i impala.example.com -q 'SELECT 1 AS test'
 
-To get a [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) similar to `{sqlite3,mysql,psql}` you run:
+## Kerberos
 
-    impala-shell -i impala.example.com
+Before using the REPL, you will need to authenticate to Kerberos from your own workstations (`apt-get install krb5-user`):
 
-**N.B.** `impala-shell` is a wrapper script for `impala-shell.sh` to make things a little simpler and more transparent
+    env KRB5CCNAME=DIR:.krb5cc kinit bob@EXAMPLE.COM
 
-You should be able to make queries via the CLI instead of the web frontend.
+Now use the REPL instead via:
 
-## Scripting
-
-If you leave your container running after authenticating, you can from another terminal window make queries directly using:
-
-    docker exec impala-shell impala-shell -i impala.example.com -q 'SELECT * FROM db.table WHERE YEAR = 2020 AND MONTH = 1 AND DAY = 24 LIMIT 1'
+    docker run -it --rm --env KRB5CCNAME=DIR:/tmp/krb5cc -v $(pwd)/.krb5cc:/tmp/krb5cc jimdigriz/impala-shell
 
 # Build
 
