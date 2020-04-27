@@ -7,24 +7,12 @@ You will need:
  * [Docker](https://docs.docker.com/install/) (sorry!)
  * Impala authentication handled by Kerberos
      * credentials for yourself to log in
- * about 20GiB of RAM to compile everything needed to get `impala-shell.sh`
- * about 30GiB of disk space (in your Docker mount point)
-
-Now checkout a copy of the project with:
-
-    git clone https://gitlab.com/jimdigriz/impala-shell.git
-
-# Build
-
-    docker build -t impala-shell .
-
-This will take at *least* 30 minutes and will download a *lot* of content from the Internet.
 
 # Usage
 
 Start running the built container image with:
 
-    docker run -it --rm --name impala-shell impala-shell
+    docker run -it --rm --name jimdigriz/impala-shell
 
 Now we authenticate ourselves to Kerberos from inside the container by running:
 
@@ -46,16 +34,24 @@ If you leave your container running after authenticating, you can from another t
 
     docker exec impala-shell impala-shell -i impala.example.com -q 'SELECT * FROM db.table WHERE YEAR = 2020 AND MONTH = 1 AND DAY = 24 LIMIT 1'
 
-## Advanced
+# Build
 
-The wrapper script `impala-shell` does the following:
+You will need:
 
- * always adds `-k` to your parameters list so you do not need to
- * when running non-interactively (ie. in a script) then it always adds the parameters `--quiet --print_header -B`
-     * `docker exec -it impala-shell ...` with the added `-it` makes the command interactive
+ * about 15GiB of disk space (in your Docker mount point)
 
-If you wanted to run `impala-shell.sh` without the wrapper, you will want to adjust your incantation to resemble:
+Checkout a copy of the project with:
 
-    docker exec impala-shell /bin/bash -lc 'impala-shell.sh -i impala.example.com -k --print_header -B -q "SELECT * FROM db.table WHERE YEAR = 2020 AND MONTH = 1 AND DAY = 24 LIMIT 1"'
+    git clone https://gitlab.com/jimdigriz/impala-shell.git
+    cd impala-shell
 
-The use of `bash -l` picks up `/etc/profile.d/impala-shell` so everything can work.
+Now build the container, which will take 20 minutes on a 50Mbps Internet connection; most of that time is spent in downloading content:
+
+    docker build -t impala-shell .
+
+## Deploy
+
+To push up to Docker Hub:
+
+    docker tag impala-shell:latest jimdigriz/impala-shell:latest
+    docker push jimdigriz/impala-shell:latest

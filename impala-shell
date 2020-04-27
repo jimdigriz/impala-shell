@@ -1,11 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 set -eu
 
-export IMPALA_HOME=/apache-impala-VERSION
-source $IMPALA_HOME/bin/impala-config.sh >/dev/null
-unset LD_LIBRARY_PATH
-
 [ -t 0 ] || HEADLESS='--quiet --print_header -B'
 
-exec $IMPALA_HOME/bin/impala-shell.sh -k ${HEADLESS:+$HEADLESS }"$@"
+exec /opt/apache/impala/impala-shell ${HEADLESS:+$HEADLESS }"$@"

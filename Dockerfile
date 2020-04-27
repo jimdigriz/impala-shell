@@ -1,22 +1,18 @@
 FROM ubuntu:bionic
 
-ARG impala_version=3.3.0
-ARG impala_sha512=71dcbb09c3d9d192f87f5031051331cf14a94f1162841b10e014917256b2212808fa5f576ea29a4b9bb3a0f8b7682910561158d69cb5d501c56587fd2844396b
+ARG impala_version=3.4.0
+ARG impala_sha512=a25d046ed469402a069df1cd2eec872b7a8fbde0e5f9da918ae9eeb3d152ceaa48f3df77a04e57f159bb4cb6f94301e3dc0ef516a39654da08a27fdf8b307fba
 
 SHELL ["/usr/bin/nice", "-n", "19", "/usr/bin/ionice", "-c", "3", "/bin/sh", "-x", "-c"]
 
-# clean later
 RUN export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get -yy --option=Dpkg::options::=--force-unsafe-io upgrade \
 	&& apt-get -yy --option=Dpkg::options::=--force-unsafe-io install --no-install-recommends \
 		ca-certificates \
-		krb5-user \
-		libsasl2-modules-gssapi-mit \
 		lsb-release \
 		sudo \
-		wget \
-		xxd
+		wget
 
 RUN wget --content-disposition https://www.apache.org/dist/impala/${impala_version}/apache-impala-${impala_version}.tar.gz \
 	&& printf "%s  %s\n" ${impala_sha512} apache-impala-${impala_version}.tar.gz \
@@ -24,23 +20,38 @@ RUN wget --content-disposition https://www.apache.org/dist/impala/${impala_versi
 	&& tar xf apache-impala-${impala_version}.tar.gz \
 	&& rm apache-impala-${impala_version}.tar.gz
 
-RUN cd apache-impala-${impala_version} \
-	&& export IMPALA_HOME=$(pwd) \
-	&& sed -ie '/buildall/ s/^/#/' bin/bootstrap_build.sh \
-	&& ./bin/bootstrap_build.sh \
-	&& sed -ie '/buildall/ s/^#//' bin/bootstrap_build.sh
+ENV IMPALA_HOME=/apache-impala-${impala_version}
 
-RUN apt-get clean \
+RUN sed -e '/buildall/ s/^/#/' $IMPALA_HOME/bin/bootstrap_build.sh | /bin/bash
+
+RUN $IMPALA_HOME/buildall.sh -release -noclean -notests -cmake_only
+
+RUN /bin/bash -c "source $IMPALA_HOME/bin/impala-config.sh && make -C $IMPALA_HOME -j$(($(getconf _NPROCESSORS_ONLN)+1)) shell_tarball" \
+	&& mv /apache-impala-${impala_version}/shell/build/impala-shell-${impala_version}-RELEASE.tar.gz /impala-shell.tar.gz
+
+FROM ubuntu:bionic
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+	&& apt-get update \
+	&& apt-get -yy --option=Dpkg::options::=--force-unsafe-io upgrade \
+	&& apt-get -yy --option=Dpkg::options::=--force-unsafe-io install --no-install-recommends \
+		krb5-user \
+		libsasl2-2 \
+		libsasl2-modules-gssapi-mit \
+		locales \
+		python \
+	&& apt-get clean \
 	&& find /var/lib/apt/lists -type f -delete
 
-RUN cd apache-impala-${impala_version} \
-	&& export IMPALA_HOME=$(pwd) \
-	&& ./buildall.sh -noclean -notests -skiptests
+ENV LC_ALL=C.UTF-8
 
-COPY profile.sh /etc/profile.d/impala-shell.sh
+COPY --from=0 /impala-shell.tar.gz /
+
+RUN tar -xf /impala-shell.tar.gz --transform='s~^\./[^/]*~opt/apache/impala~' \
+	&& rm /impala-shell.tar.gz
+
 COPY impala-shell /usr/local/bin/impala-shell
-RUN /bin/sh -c "sed -i -e 's/VERSION/${impala_version}/g' /etc/profile.d/impala-shell.sh /usr/local/bin/impala-shell"
 
 COPY krb5.conf /etc/krb5.conf
 
-CMD ["/bin/bash", "-l"]
+ENTRYPOINT ["/usr/local/bin/impala-shell"]
