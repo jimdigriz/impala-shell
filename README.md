@@ -18,7 +18,7 @@ This will drop you straight into a CLI [REPL](https://en.wikipedia.org/wiki/Read
 
 If you want to use this from a script, you may find the following form useful to run queries directly:
 
-    docker run --rm impala-shell -i impala.example.com -q 'SELECT 1 AS test'
+    docker run --rm jimdigriz/impala-shell -i impala.example.com -q 'SELECT 1 AS test'
 
 ## Kerberos
 
